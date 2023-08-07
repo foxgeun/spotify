@@ -1,5 +1,19 @@
 package com.example.spotify.search;
 
+import java.util.List;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
+
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -8,12 +22,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class MusicSearch {
+    private final String accessToken;
 
-    public String search(String accessToken, String q){ //q는 검색어
+    public MusicSearch(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
+    public String search(String q){ //q는 검색어
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);;
+        headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Host", "api.spotify.com");
         headers.add("Content-type", "application/json");
         String body = "";
@@ -23,8 +41,6 @@ public class MusicSearch {
         HttpStatus httpStatus = (HttpStatus) responseEntity.getStatusCode();
         int status = httpStatus.value(); //상태 코드가 들어갈 status 변수
         String response = responseEntity.getBody();
-        System.out.println("Response status: " + status);
-        System.out.println(response);
 
         return response;
     }
