@@ -2,7 +2,6 @@ package com.example.spotify.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.spotify.search.MusicSearch;
 import com.example.spotify.token.CreateToken;
@@ -35,10 +34,12 @@ public class SpotifyController {
         // JSONParser로 JSONObject로 변환
         try {
             JSONParser parser = new JSONParser();
+            System.out.println(response);
             JSONObject jsonObject = (JSONObject) parser.parse(response);
 
             // "tracks" 안의 "items" 배열 추출
             JSONObject tracksObject = (JSONObject) jsonObject.get("tracks");
+            System.out.println(tracksObject);
             JSONArray itemsArray = (JSONArray) tracksObject.get("items");
 
             // "name" 값을 추출하여 리스트에 담기
@@ -49,8 +50,9 @@ public class SpotifyController {
                 songNames.add(songName);
                 
             }
-
+            model.addAttribute("accessToken", accessToken);
             model.addAttribute("dd", songNames);
+            
             System.out.println(songNames);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -59,4 +61,6 @@ public class SpotifyController {
 
         return "index"; // index.html 템플릿으로 이동
     }
+    
+    
 }
